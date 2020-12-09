@@ -1,5 +1,5 @@
 const express = require('express');
-const setupService = require('../services/match_setup');
+const validationService = require('../services/validation');
 const router = express.Router();
 
 
@@ -10,7 +10,12 @@ router.post('/', (req, res) => {
 
 router.put('/host', (req, res) => {
     var hostRequest = req.body;
-    var matchId = setupService.hostMatch(hostRequest.userId, hostRequest.numRounds, hostRequest.roundTime);
+    return validationService.hostValidation(res, hostRequest.userId, hostRequest.numRounds, hostRequest.roundTime);
+});
+
+router.put('/join', (req, res) => {
+    var joinRequest = req.body;
+    var matchId = setupService.joinMatch(joinRequest.userId, joinRequest.matchId);
     res.send(matchId);
 });
 
