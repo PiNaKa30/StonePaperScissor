@@ -1,11 +1,9 @@
-const redis = require('redis');
-const props = require('../props');
 const setupService = require('./match_setup');
 const constants = require('../objects/constants');
-const rClient = redis.createClient(props.PORT_REDIS);
+const redis = require('../cache/redis');
 
 function hostValidation(res, userId, numRounds, roundTime){
-    rClient.get("PLAYER_" + userId, (err, data) => {
+    redis.client.get("PLAYER_" + userId, (err, data) => {
         if(data){
             return res.json({
                 type: constants.TYPE_ERROR,
@@ -24,7 +22,7 @@ function hostValidation(res, userId, numRounds, roundTime){
 }
 
 function joinValidation(res, userId, matchId){
-    rClient.get("PLAYER_" + userId, (err, data) => {
+    redis.client.get("PLAYER_" + userId, (err, data) => {
         if(data){
             return res.json({
                 type: constants.TYPE_ERROR,
@@ -32,7 +30,7 @@ function joinValidation(res, userId, matchId){
                 data: null
             });
         } else {
-            rClient.get("MATCH_" + matchId, (err, data) => {
+            redis.client.get("MATCH_" + matchId, (err, data) => {
                 if(data){
                     var matchData = JSON.parse(data);
                     if(matchData.status == constants.MATCH_WAITING){
@@ -61,7 +59,16 @@ function joinValidation(res, userId, matchId){
     });
 }
 
+function roomValidation(userId, matchId){
+    redis.client.get("PLAYER_" + userId, (err,data) => {
+        if(data){
+            return data == matchId;
+        } else return false;
+    });
+}
+
 module.exports = {
     hostValidation,
-    joinValidation
+    joinValidation,
+    roomValidation
 }

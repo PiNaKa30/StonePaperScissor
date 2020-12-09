@@ -1,6 +1,7 @@
 module.exports = {
     TYPE_SUCCESS: "Success",
     TYPE_ERROR: "Error",
+    TYPE_NOTIFICATION: "Notification",
 
     MATCH_STARTED: "Started",
     MATCH_PAUSED: "Paused",
@@ -12,4 +13,6 @@ module.exports = {
 
     SUCCESS_MATCH_HOSTED: "Match successfully hosted !",
     SUCCESS_MATCH_JOINED: "Match successfully joined !",
+
+    NOTIFY_CANT_JOIN_ROOM: "Cannot join the specified room !"
 }

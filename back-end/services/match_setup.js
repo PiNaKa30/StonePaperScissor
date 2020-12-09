@@ -1,6 +1,5 @@
 const match = require('../objects/match');
 const cacheAdd = require('../cache/add');
-const cacheSearch = require('../cache/search');
 const constants = require('../objects/constants');
 
 function hostMatch(userId, numRounds, roundTimer) {
