@@ -15,8 +15,7 @@ router.put('/host', (req, res) => {
 
 router.put('/join', (req, res) => {
     var joinRequest = req.body;
-    var matchId = setupService.joinMatch(joinRequest.userId, joinRequest.matchId);
-    res.send(matchId);
+    return validationService.joinValidation(res, joinRequest.userId, joinRequest.matchId);
 });
 
 module.exports.router = router;

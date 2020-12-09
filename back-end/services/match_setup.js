@@ -1,10 +1,8 @@
 const match = require('../objects/match');
 const cacheAdd = require('../cache/add');
 const cacheSearch = require('../cache/search');
+const constants = require('../objects/constants');
 
-/**
- * TODO: Add Validation
- */ 
 function hostMatch(userId, numRounds, roundTimer) {
     var newMatch = match.createMatch(userId, numRounds, roundTimer);
     var matchId = generateMatchId();
@@ -14,14 +12,13 @@ function hostMatch(userId, numRounds, roundTimer) {
     return matchId;
 }
 
-/**
- * TODO: Add Validation
- */ 
-function joinMatch(userId, matchId) {
+function joinMatch(userId, matchId, matchData) {
     console.log(userId, matchId);
+    matchData.players.player2 = userId;
+    matchData.status = constants.MATCH_STARTED;
     cacheAdd.addPlayerToCache(userId, matchId);
-    cacheAdd.addMatchToCache(matchId, newMatch);
-    return matchId;
+    cacheAdd.addMatchToCache(matchId, matchData);
+    return matchData;
 }
 
 function generateMatchId(){
