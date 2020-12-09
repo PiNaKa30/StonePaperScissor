@@ -1,13 +1,11 @@
-const redis = require('redis');
-const props = require('../props');
-const rClient = redis.createClient(props.PORT_REDIS);
+const redis = require('./redis');
 
 function deleteMatchById(matchId){
-    rClient.del(matchId);
+    redis.client.del(matchId);
 }
 
 function deletePlayerById(userId){
-    rClient.del(userId);
+    redis.client.del(userId);
 }
 
 module.exports = {

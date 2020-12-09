@@ -1,13 +1,11 @@
-const redis = require('redis');
-const props = require('../props');
-const rClient = redis.createClient(props.PORT_REDIS);
+const redis = require('./redis');
 
 function addMatchToCache(matchId, matchObject){
-    rClient.set("MATCH_" + matchId, JSON.stringify(matchObject));
+    redis.client.set("MATCH_" + matchId, JSON.stringify(matchObject));
 }
 
 function addPlayerToCache(userId, matchId){
-    rClient.set("PLAYER_" + userId, matchId);
+    redis.client.set("PLAYER_" + userId, matchId);
 }
 
 module.exports = {
