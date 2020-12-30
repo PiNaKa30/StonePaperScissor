@@ -1,15 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 //import './index.css';
 //import App from './App';
-import MainScreen from './js/screens/start';
-import reportWebVitals from './reportWebVitals';
+import MainScreen from "./js/screens/start";
+import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
     <MainScreen />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

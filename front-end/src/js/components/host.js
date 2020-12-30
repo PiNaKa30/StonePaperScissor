@@ -2,20 +2,36 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
 import Radio from "@material-ui/core/Radio";
-import Typography from '@material-ui/core/Typography';
-
+import Typography from "@material-ui/core/Typography";
 
 export default class HostForm extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      userName: "",
+      numRounds: 9,
+      gameMode: "Standard",
+    };
   }
 
+  handleChange = (e) => {
+    let key = e.target.name;
+    let val = e.target.value;
+    if (key === "userName") {
+      val = val.replace(/[^a-zA-Z0-9 #@!_]/g, "_");
+    } else if (key === "numRounds") {
+      val = parseInt(val < 1 ? 1 : val > 99 ? 99 : val);
+    }
+    this.setState({
+      [key]: val,
+    });
+  };
+
   render() {
+    console.log(this.state);
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -25,48 +41,79 @@ export default class HostForm extends React.Component {
                 //error
                 fullWidth
                 autoFocus
-                id="userIdInput"
+                value={this.state.userName}
+                onChange={this.handleChange}
+                id="hostIdInput"
+                name="userName"
                 label="Username"
-                //helperText="Incorrect entry."
+                inputProps={{ maxLength: 25 }}
+                helperText=""
                 variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                //error
-                fullWidth
-                id="numRoundsInput"
-                label="Rounds"
-                type="number"
-                InputProps={{ inputProps: { min: 1, max: 99 } }}
-                defaultValue={9}
-                //helperText="Incorrect entry."
-                variant="outlined"
-              />
-            </Grid>
-            
-            <Grid item xs={12}>
-              <RadioGroup
-                row
-                aria-label="position"
-                name="position"
-                defaultValue="top"
+              />{" "}
+              <br />
+              <br />
+              <Grid
+                container
+                direction="row"
+                justify="space-evenly"
+                alignItems="center"
               >
-              <Typography variant="body1">Game Mode <span style={{marginRight: "36px"}}> </span>
+                <Grid item xm={6}>
+                  <TextField
+                    fullWidth
+                    id="numRoundsInput"
+                    label="Rounds"
+                    type="number"
+                    value={this.state.numRounds}
+                    onChange={this.handleChange}
+                    name="numRounds"
+                    InputProps={{ inputProps: { min: 1, max: 99 } }}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xm={6}>
+                  <TextField
+                    fullWidth
+                    id="numRoundsInput"
+                    label="Rounds"
+                    type="number"
+                    value={this.state.numRounds}
+                    onChange={this.handleChange}
+                    name="numRounds"
+                    InputProps={{ inputProps: { min: 1, max: 99 } }}
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={6} style={{ paddingLeft: "36px" }}>
+              <RadioGroup
+                name="gameMode"
+                value={this.state.gameMode}
+                onChange={this.handleChange}
+              >
+                <Typography
+                  variant="h6"
+                  component={"span"}
+                  className="colorPrimary"
+                >
+                  <strong>Game Mode</strong>
+                </Typography>
                 <FormControlLabel
-                  value="standard"
+                  value="Standard"
                   control={<Radio color="primary" />}
                   label="Standard"
                 />
                 <FormControlLabel
-                  value="twisted"
+                  value="Twisted"
                   control={<Radio color="primary" />}
                   label="Twisted"
                 />
-              </Typography>
               </RadioGroup>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={8}></Grid>
+            <Grid item xs={4}>
               <Button variant="contained" color="primary">
                 Host Game
               </Button>

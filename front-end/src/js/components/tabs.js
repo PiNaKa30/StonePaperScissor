@@ -1,11 +1,11 @@
 import React from "react";
-import SwipeableViews from "react-swipeable-views";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import HostForm from "./host";
+import JoinForm from "./join";
 
 function a11yProps(index) {
   return {
@@ -22,13 +22,13 @@ function TabPanel(props) {
       role="tabpanel"
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
-      style={{backgroundColor: "whitesmoke"}}
+      style={{ backgroundColor: "whitesmoke" }}
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={"span"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -42,12 +42,15 @@ export default function FullWidthTabs() {
     setValue(newValue);
   };
 
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
-
   return (
-    <div>
+    <div
+      style={{
+        border: "2px solid #888888",
+        borderRadius: "24px",
+        padding: "16px",
+        boxShadow: "5px 10px #888888",
+      }}
+    >
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -61,16 +64,13 @@ export default function FullWidthTabs() {
           <Tab label="Join Game" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <SwipeableViews
-        axis={"x"}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-      >
-        <TabPanel value={value} index={0}>
-          <HostForm />
-        </TabPanel>
-        <TabPanel value={value} index={1}></TabPanel>
-      </SwipeableViews>
+
+      <TabPanel value={value} index={0}>
+        <HostForm />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <JoinForm />
+      </TabPanel>
     </div>
   );
 }
