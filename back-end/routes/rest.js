@@ -8,12 +8,12 @@ router.post('/', (req, res) => {
     res.send('Hello World!');
 });
 
-router.put('/host', (req, res) => {
+router.post('/host', (req, res) => {
     var hostRequest = req.body;
-    return validationService.hostValidation(res, hostRequest.userId, hostRequest.numRounds, hostRequest.roundTime);
+    return validationService.hostValidation(res, hostRequest.userId, hostRequest.numRounds, hostRequest.gameMode);
 });
 
-router.put('/join', (req, res) => {
+router.post('/join', (req, res) => {
     var joinRequest = req.body;
     return validationService.joinValidation(res, joinRequest.userId, joinRequest.matchId);
 });

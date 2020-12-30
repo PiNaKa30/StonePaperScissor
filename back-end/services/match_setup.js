@@ -2,8 +2,8 @@ const match = require('../objects/match');
 const cacheAdd = require('../cache/add');
 const constants = require('../objects/constants');
 
-function hostMatch(userId, numRounds, roundTimer) {
-    var newMatch = match.createMatch(userId, numRounds, roundTimer);
+function hostMatch(userId, numRounds, gameMode) {
+    var newMatch = match.createMatch(userId, numRounds, gameMode);
     var matchId = generateMatchId();
     console.log(userId, matchId);
     cacheAdd.addPlayerToCache(userId, matchId);

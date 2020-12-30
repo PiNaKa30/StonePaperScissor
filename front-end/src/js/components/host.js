@@ -14,7 +14,15 @@ export default class HostForm extends React.Component {
       userName: "",
       numRounds: 9,
       gameMode: "Standard",
+      errorText: ""
     };
+  }
+
+  static getDerivedStateFromProps(props, current_state){
+    return {
+      ...current_state,
+      errorText: props.errorText
+    }
   }
 
   handleChange = (e) => {
@@ -31,13 +39,14 @@ export default class HostForm extends React.Component {
   };
 
   render() {
+    console.log("host", this.state);
     return (
       <div>
         <form noValidate autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
-                //error
+                {... addError(this.state.errorText)}
                 fullWidth
                 autoFocus
                 value={this.state.userName}
@@ -46,7 +55,7 @@ export default class HostForm extends React.Component {
                 name="userName"
                 label="Username"
                 inputProps={{ maxLength: 25 }}
-                helperText=""
+                helperText={this.state.errorText}
                 variant="outlined"
               />{" "}
               <br />
@@ -122,4 +131,8 @@ export default class HostForm extends React.Component {
       </div>
     );
   }
+}
+
+function addError(errorText){
+  return errorText === "" ? null : {error : true};
 }

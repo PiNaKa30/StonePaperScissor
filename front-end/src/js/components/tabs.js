@@ -42,7 +42,9 @@ export default class FullWidthTabs extends React.Component {
     this.state = {
       matchId: this.props.matchId,
       isHost: this.props.isHost,
-      index: (this.props.matchId !== "" || this.props.isHost) ? 1 : 0
+      index: (this.props.matchId !== "" || this.props.isHost) ? 1 : 0,
+      hostError: this.props.hostError,
+      joinError: this.props.joinError
     }
     console.log(this.state);
   }
@@ -52,7 +54,9 @@ export default class FullWidthTabs extends React.Component {
     return {
       matchId: props.matchId,
       isHost: props.isHost,
-      index: (props.matchId !== "" || props.isHost) ? 1 : current_state.index
+      index: (props.matchId !== "" || props.isHost) ? 1 : current_state.index,
+      hostError: props.hostError || "",
+      joinError: props.joinError || ""
     }
   }
 
@@ -91,10 +95,10 @@ export default class FullWidthTabs extends React.Component {
         </AppBar>
   
         <TabPanel value={this.state.index} index={0}>
-          <HostForm submit={this.props.submitHost} />
+          <HostForm submit={this.props.submitHost} errorText={this.state.hostError} />
         </TabPanel>
         <TabPanel value={this.state.index} index={1}>
-          <JoinForm matchId={this.state.matchId} submit={this.props.submitJoin} isHost={this.state.isHost}/>
+          <JoinForm matchId={this.state.matchId} submit={this.props.submitJoin} isHost={this.state.isHost} errorText={this.state.joinError} />
         </TabPanel>
       </div>
     );

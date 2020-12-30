@@ -1,6 +1,6 @@
 const constants = require('./constants');
 
-function createMatch(userId, numRounds, roundTimer){
+function createMatch(userId, numRounds, gameMode){
     return {
         players: {
             player1: userId,
@@ -12,7 +12,7 @@ function createMatch(userId, numRounds, roundTimer){
         },
         currentRound: 0,
         numRounds,
-        roundTimer,
+        gameMode,
         status: constants.MATCH_WAITING
     };
 }

@@ -15,6 +15,15 @@ export default class JoinForm extends React.Component {
       userName: "",
       joinCode: this.props.matchId,
       isHost: this.props.isHost,
+      errorText: "",
+    };
+  }
+
+  static getDerivedStateFromProps(props, current_state) {
+    return {
+      ...current_state,
+      errorText: props.errorText,
+      isHost: props.isHost,
     };
   }
 
@@ -37,7 +46,7 @@ export default class JoinForm extends React.Component {
             <Grid container spacing={2}>
               <Grid item lg={6}>
                 <TextField
-                  //error
+                  {...addError(this.state.errorText, 0)}
                   fullWidth
                   autoFocus
                   value={this.state.userName}
@@ -46,13 +55,12 @@ export default class JoinForm extends React.Component {
                   name="userName"
                   label="Username"
                   inputProps={{ maxLength: 25 }}
-                  //helperText="Incorrect entry."
                   variant="outlined"
                 />
               </Grid>
               <Grid item lg={6}>
                 <TextField
-                  //error
+                  {...addError(this.state.errorText, 1)}
                   fullWidth
                   value={this.state.joinCode}
                   onChange={this.handleChange}
@@ -60,15 +68,18 @@ export default class JoinForm extends React.Component {
                   name="joinCode"
                   label="Match Id"
                   inputProps={{ maxLength: 6 }}
-                  //helperText="Incorrect entry."
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} style={{textAlign: "right"}}>
-              <Button variant="contained" color="primary" onClick={() => this.props.submit(this.state)}>
-                Join Game
-              </Button>
-            </Grid>
+              <Grid item xs={12} style={{ textAlign: "right" }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.props.submit(this.state)}
+                >
+                  Join Game
+                </Button>
+              </Grid>
             </Grid>
           </form>
         </div>
@@ -87,5 +98,17 @@ export default class JoinForm extends React.Component {
         </div>
       );
     }
+  }
+}
+
+function addError(errorText, index) {
+  if (errorText === "This user already exists !" && index === 0) {
+    return { error: true, helperText: errorText };
+  } else if (errorText === "This user already exists !" && index === 1) {
+    return null;
+  } else if (errorText === "" || index === 0) {
+    return null;
+  } else {
+    return { error: true, helperText: errorText };
   }
 }

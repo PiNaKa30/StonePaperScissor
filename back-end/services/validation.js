@@ -2,7 +2,7 @@ const setupService = require('./match_setup');
 const constants = require('../objects/constants');
 const redis = require('../cache/redis');
 
-function hostValidation(res, userId, numRounds, roundTime){
+function hostValidation(res, userId, numRounds, gameMode){
     redis.client.get("PLAYER_" + userId, (err, data) => {
         if(data){
             return res.json({
@@ -11,7 +11,7 @@ function hostValidation(res, userId, numRounds, roundTime){
                 data: null
             });
         } else {
-            var matchId = setupService.hostMatch(userId, numRounds, roundTime);
+            var matchId = setupService.hostMatch(userId, numRounds, gameMode);
             return res.json({
                 type: constants.TYPE_SUCCESS,
                 message: constants.SUCCESS_MATCH_HOSTED,
