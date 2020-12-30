@@ -35,42 +35,70 @@ function TabPanel(props) {
   );
 }
 
-export default function FullWidthTabs() {
-  const [value, setValue] = React.useState(0);
+export default class FullWidthTabs extends React.Component {
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  constructor(props){
+    super(props);
+    this.state = {
+      matchId: this.props.matchId,
+      isHost: this.props.isHost,
+      index: (this.props.matchId !== "" || this.props.isHost) ? 1 : 0
+    }
+    console.log(this.state);
+  }
+
+  static getDerivedStateFromProps(props, current_state){
+    console.log("Triggered");
+    return {
+      matchId: props.matchId,
+      isHost: props.isHost,
+      index: (props.matchId !== "" || props.isHost) ? 1 : current_state.index
+    }
+  }
+
+  handleChange = (e, newValue) => {
+    console.log("index", newValue);
+    this.setState((previousState) => ({
+      matchId: previousState.matchId,
+      isHost: previousState.isHost,
+      index: newValue
+    }));
   };
 
-  return (
-    <div
-      style={{
-        border: "2px solid #888888",
-        borderRadius: "24px",
-        padding: "16px",
-        boxShadow: "5px 10px #888888",
-      }}
-    >
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="full width tabs example"
-        >
-          <Tab label="Host Game" {...a11yProps(0)} />
-          <Tab label="Join Game" {...a11yProps(1)} />
-        </Tabs>
-      </AppBar>
+  render(){
+    console.log(this.state);
+    return (
+      <div
+        style={{
+          border: "2px solid #888888",
+          borderRadius: "24px",
+          padding: "16px",
+          boxShadow: "5px 10px #888888",
+        }}
+      >
+        <AppBar position="static" color="default">
+          <Tabs
+            value={this.state.index}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Host Game" {...a11yProps(0)} />
+            <Tab label="Join Game" {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
+  
+        <TabPanel value={this.state.index} index={0}>
+          <HostForm submit={this.props.submitHost} />
+        </TabPanel>
+        <TabPanel value={this.state.index} index={1}>
+          <JoinForm matchId={this.state.matchId} submit={this.props.submitJoin} isHost={this.state.isHost}/>
+        </TabPanel>
+      </div>
+    );
+  }
 
-      <TabPanel value={value} index={0}>
-        <HostForm />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <JoinForm />
-      </TabPanel>
-    </div>
-  );
+  
 }

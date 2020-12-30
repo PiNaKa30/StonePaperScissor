@@ -13,8 +13,8 @@ export default class JoinForm extends React.Component {
     super(props);
     this.state = {
       userName: "",
-      joinCode: "123456",
-      isHost: true,
+      joinCode: this.props.matchId,
+      isHost: this.props.isHost,
     };
   }
 
@@ -30,13 +30,12 @@ export default class JoinForm extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     if (!this.state.isHost) {
       return (
         <div>
           <form noValidate autoComplete="off">
             <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Grid item lg={6}>
                 <TextField
                   //error
                   fullWidth
@@ -51,7 +50,7 @@ export default class JoinForm extends React.Component {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item lg={6}>
                 <TextField
                   //error
                   fullWidth
@@ -65,12 +64,11 @@ export default class JoinForm extends React.Component {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={8}></Grid>
-              <Grid item xs={4}>
-                <Button variant="contained" color="primary">
-                  Join Game
-                </Button>
-              </Grid>
+              <Grid item xs={12} style={{textAlign: "right"}}>
+              <Button variant="contained" color="primary" onClick={() => this.props.submit(this.state)}>
+                Join Game
+              </Button>
+            </Grid>
             </Grid>
           </form>
         </div>

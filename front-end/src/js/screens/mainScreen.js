@@ -15,9 +15,31 @@ import MenuIcon from "@material-ui/icons/Menu";
 export default class MainScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isHost: false,
+      matchId: this.props.matchId || ""
+    }
+    this.hostInfo = null;
+    this.joinInfo = null;
+  }
+
+  handleHost = (hostInfo) => {
+    this.hostInfo = hostInfo;
+    console.log(hostInfo);
+    // Ajax then setState
+    this.setState({
+      isHost: true,
+      matchId: "123456"
+    });
+  }
+
+  handleJoin = (joinInfo) => {
+    console.log(joinInfo);
+    this.joinInfo = joinInfo;
   }
 
   render() {
+    console.log("Rerender");
     return (
       <div>
         <AppBar position="static">
@@ -58,7 +80,7 @@ export default class MainScreen extends React.Component {
             />
           </Grid>
           <Grid item md={5}>
-            <FullWidthTabs />
+            <FullWidthTabs matchId={this.state.matchId} submitHost={this.handleHost} submitJoin={this.handleJoin} isHost={this.state.isHost} />
           </Grid>
           <Grid item md={1} />
         </Grid>

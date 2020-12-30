@@ -31,7 +31,6 @@ export default class HostForm extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -55,10 +54,11 @@ export default class HostForm extends React.Component {
               <Grid
                 container
                 direction="row"
-                justify="space-evenly"
+                justify="space-around"
+                spacing={2}
                 alignItems="center"
               >
-                <Grid item xm={6}>
+                <Grid item lg={6}>
                   <TextField
                     fullWidth
                     id="numRoundsInput"
@@ -71,7 +71,7 @@ export default class HostForm extends React.Component {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item xm={6}>
+                <Grid item lg={6}>
                   <TextField
                     fullWidth
                     id="numRoundsInput"
@@ -112,9 +112,8 @@ export default class HostForm extends React.Component {
                 />
               </RadioGroup>
             </Grid>
-            <Grid item xs={8}></Grid>
-            <Grid item xs={4}>
-              <Button variant="contained" color="primary">
+            <Grid item xs={12} style={{textAlign: "right"}}>
+              <Button variant="contained" color="primary" onClick={() => this.props.submit(this.state)}>
                 Host Game
               </Button>
             </Grid>
