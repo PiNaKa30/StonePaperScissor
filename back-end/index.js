@@ -11,7 +11,7 @@ const props = require('./props');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-const ws = require('./events/websocket')(io);
+const ws = require('./events/websocket');
 
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
@@ -19,7 +19,8 @@ app.use(function (req, res, next) {
     next();
 });
 app.use('/', require('./routes/rest').router);
+ws.registerEvents(io);
 
-app.listen(props.PORT_SERVER, () => {
+http.listen(props.PORT_SERVER, () => {
   console.log(`StonePaperScissor: Backend up at http://localhost:${props.PORT_SERVER}`);
 });

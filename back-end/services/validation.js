@@ -59,16 +59,7 @@ function joinValidation(res, userId, matchId){
     });
 }
 
-function roomValidation(userId, matchId){
-    redis.client.get("PLAYER_" + userId, (err,data) => {
-        if(data){
-            return data == matchId;
-        } else return false;
-    });
-}
-
 module.exports = {
     hostValidation,
-    joinValidation,
-    roomValidation
+    joinValidation
 }

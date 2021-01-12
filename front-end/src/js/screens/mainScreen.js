@@ -13,8 +13,9 @@ import HomeIcon from '@material-ui/icons/Home';
 import IconButton from "@material-ui/core/IconButton";
 import axios from 'axios';
 import MenuIcon from "@material-ui/icons/Menu";
+import {withRouter} from 'react-router';
 
-export default class MainScreen extends React.Component {
+class MainScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,6 +26,13 @@ export default class MainScreen extends React.Component {
     }
     this.hostInfo = null;
     this.joinInfo = null;
+  }
+
+  static getDerivedStateFromProps(props, current_state) {
+    if(props.gameStarted){
+      props.history.push("/play");
+    }
+    return current_state;
   }
 
   handleHost = (hostInfo) => {
@@ -55,6 +63,7 @@ export default class MainScreen extends React.Component {
             isHost: true,
             matchId: res.data.matchId
           });
+          this.props.joinGame(data.userId, res.data.matchId, true);
         } else {
           this.setState({
             ...this.state,
@@ -79,6 +88,7 @@ export default class MainScreen extends React.Component {
             isHost: true,
             matchId: data.matchId
           });
+          this.props.joinGame(data.userId, data.matchId, false);
         } else {
           this.setState({
             ...this.state,
@@ -87,6 +97,8 @@ export default class MainScreen extends React.Component {
         }
       });
   }
+
+
 
   render() {
     console.log("Rerender");
@@ -141,3 +153,5 @@ export default class MainScreen extends React.Component {
     );
   }
 }
+
+export default withRouter(MainScreen);
