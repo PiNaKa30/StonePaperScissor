@@ -20,3 +20,8 @@ body {
 .colorPrimary {
   color: #3f51b5;
 }
+
+@keyframes spin {
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
+}
