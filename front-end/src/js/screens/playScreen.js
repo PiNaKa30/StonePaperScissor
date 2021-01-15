@@ -17,13 +17,70 @@ import CustomizedSnackbars from "../components/snackbar";
 class PlayScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      round: 1,
+      roundStatus: "MY_TURN",
+      myScore: 0,
+      opponentScore: 0,
+      myName: "",
+      opponentName: "",
+      gameMode: "Standard",
+      snackbarOpen: false
+    };
+    this.snackbarOptions = {
+      msg: "",
+      severity: ""
+    }
   }
 
   static getDerivedStateFromProps(props, current_state) {
     // if (!props.gameStarted) {
     //   props.history.push("/");
     // }
+    if (props.userInfo.isHost) {
+      current_state.myName = props.gameInfo.hostName;
+      current_state.opponentName = props.gameInfo.joineeName;
+    } else {
+      current_state.myName = props.gameInfo.joineeName;
+      current_state.opponentName = props.gameInfo.hostName;
+    }
+    current_state.gameMode = props.gameInfo.gameMode;
     return current_state;
+  }
+
+  generateCards = () => {
+    let cardMap = {
+      0: "Stone",
+      1: "Paper",
+      2: "Scissor",
+    };
+    let cardArray = [];
+    for (let i = 0; i < 3; i++) {
+      cardArray.push(
+        this.state.gameMode === "Standard" ? i : Math.floor(Math.random() * 3)
+      );
+    }
+    return (
+      <Grid container justify="center" alignItems="center" spacing={2}>
+        <Grid item md={4}>
+          <PlayingCard type={cardMap[cardArray[0]]} />
+        </Grid>
+        <Grid item md={4}>
+          <PlayingCard type={cardMap[cardArray[1]]} />
+        </Grid>
+        <Grid item md={4}>
+          <PlayingCard type={cardMap[cardArray[2]]} />
+        </Grid>
+      </Grid>
+    );
+  }
+
+  generateWaitCard = () => {
+    if(this.state.roundStatus === "MY_TURN"){
+      return (<WaitingCard type={0} />);
+    } else if(this.state.roundStatus === "OPPONENT_TURN"){
+      return (<WaitingCard type={1} />);
+    }
   }
 
   render() {
@@ -38,12 +95,12 @@ class PlayScreen extends React.Component {
             <Grid container alignItems="center">
               <Grid item sm={2}>
                 <Typography variant="h5">
-                  <strong>5</strong>
+                  <strong>{this.state.opponentScore}</strong>
                 </Typography>
               </Grid>
               <Grid item sm={3}>
                 <Typography variant="h5">
-                  <strong>Shourya</strong>
+                  <strong>{this.state.opponentName}</strong>
                 </Typography>
               </Grid>
               <Grid item sm={2}>
@@ -53,27 +110,24 @@ class PlayScreen extends React.Component {
               </Grid>
               <Grid item sm={3}>
                 <Typography variant="h5">
-                  <strong>Hulk</strong>
+                  <strong>{this.state.myName}</strong>
                 </Typography>
               </Grid>
               <Grid item sm={2}>
                 <Typography variant="h5">
-                  <strong>4</strong>
+                  <strong>{this.state.myScore}</strong>
                 </Typography>
               </Grid>
             </Grid>
           </Toolbar>
         </AppBar>
-        <Grid
-          container
-          spacing={2}
-          alignItems="center">
-            <Grid item xs={12} style={{textAlign: "center"}}>
-              <Typography variant="h6">
-                  <strong>Round 1</strong>
-                </Typography>
-            </Grid>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} style={{ textAlign: "center" }}>
+            <Typography variant="h6">
+              <strong>Round {this.state.round}</strong>
+            </Typography>
           </Grid>
+        </Grid>
         <Grid
           container
           spacing={2}
@@ -83,25 +137,15 @@ class PlayScreen extends React.Component {
             overflow: "hidden",
             backgroundColor: "#f5f5f5",
             textAlign: "center",
-            paddingTop: "48px"
+            paddingTop: "48px",
           }}
         >
           <Grid item md={5}>
-            <WaitingCard />
-            <CustomizedSnackbars open={true} msg="You win" severity="success" />
+            {this.generateWaitCard()}
+            <CustomizedSnackbars open={this.state.snackbarOpen} msg={this.snackbarOptions.msg} severity={this.snackbarOptions.severity} />
           </Grid>
           <Grid item md={6}>
-            <Grid container justify="center" alignItems="center" spacing={2}>
-              <Grid item md={4}>
-                <PlayingCard type="Stone" />
-              </Grid>
-              <Grid item md={4}>
-                <PlayingCard type="Paper" />
-              </Grid>
-              <Grid item md={4}>
-                <PlayingCard type="Scissor" />
-              </Grid>
-            </Grid>
+            {this.generateCards()}
           </Grid>
           <Grid item md={1}></Grid>
         </Grid>

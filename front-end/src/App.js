@@ -19,6 +19,8 @@ export default class App extends React.Component {
       gameStarted: false,
     };
     this.socket = null;
+    this.gameInfo = null;
+    this.userInfo = null;
   }
 
   componentDidMount() {
@@ -32,25 +34,27 @@ export default class App extends React.Component {
 
   registerListeners = () => {
     this.socket.on("START_GAME", (data) => {
-      console.log("Game Started !");
+      console.log("Game Started !", data);
+      this.gameInfo = data;
       this.setState({
         gameStarted: true,
       });
     });
   };
 
-  joinGame = (userId, matchId, isHost) => {
+  joinMatch = (userId, matchId, isHost) => {
     let data = {
       userId,
       matchId,
       isHost,
     };
+    this.userInfo = data;
     this.socket.emit("JOIN_ROOM", data);
-    if (!isHost) {
-      this.setState({
-        gameStarted: true,
-      });
-    }
+    // if (!isHost) {
+    //   this.setState({
+    //     gameStarted: true,
+    //   });
+    // }
   };
 
   render() {
@@ -58,14 +62,14 @@ export default class App extends React.Component {
         <Router>
           <Switch>
             <Route exact path="/">
-              <MainScreen joinGame={this.joinGame} gameStarted={this.state.gameStarted}/>
+              <MainScreen joinMatch={this.joinMatch} gameStarted={this.state.gameStarted}/>
             </Route>
             <Route path="/play">
-              <PlayScreen gameStarted={this.state.gameStarted} />
+              <PlayScreen gameStarted={this.state.gameStarted} gameInfo={this.gameInfo} userInfo={this.userInfo} />
             </Route>
             <Route
               path="/join/:matchId"
-              children={<Child joinGame={this.joinGame} gameStarted={this.state.gameStarted} />}
+              children={<Child joinMatch={this.joinMatch} gameStarted={this.state.gameStarted} />}
             />
             <Route path="*">
               <Redirect to="/" />
@@ -80,5 +84,5 @@ export default class App extends React.Component {
 function Child(props) {
   let { matchId } = useParams();
 
-  return <MainScreen matchId={matchId} joinGame={props.joinGame} gameStarted={props.gameStarted} />;
+  return <MainScreen matchId={matchId} joinMatch={props.joinMatch} gameStarted={props.gameStarted} />;
 }

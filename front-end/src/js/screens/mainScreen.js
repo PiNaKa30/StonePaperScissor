@@ -37,7 +37,6 @@ class MainScreen extends React.Component {
 
   handleHost = (hostInfo) => {
     this.hostInfo = hostInfo;
-    console.log("Screen parent", hostInfo);
     this.sendHostRequest(hostInfo);
   }
 
@@ -63,7 +62,7 @@ class MainScreen extends React.Component {
             isHost: true,
             matchId: res.data.matchId
           });
-          this.props.joinGame(data.userId, res.data.matchId, true);
+          this.props.joinMatch(data.userId, res.data.matchId, true);
         } else {
           this.setState({
             ...this.state,
@@ -88,7 +87,7 @@ class MainScreen extends React.Component {
             isHost: true,
             matchId: data.matchId
           });
-          this.props.joinGame(data.userId, data.matchId, false);
+          this.props.joinMatch(data.userId, data.matchId, false);
         } else {
           this.setState({
             ...this.state,
@@ -101,7 +100,6 @@ class MainScreen extends React.Component {
 
 
   render() {
-    console.log("Rerender");
     return (
       <div>
         <AppBar position="static">
