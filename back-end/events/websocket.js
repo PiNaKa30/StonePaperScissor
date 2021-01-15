@@ -1,16 +1,16 @@
 const validationService = require('../services/validation');
 const constants = require('../objects/constants');
+const gameMethods = require('../services/game_methods');
 
 function registerEvents(io) {
     io.on('connection', (socket) => {
-        //! User joining twice
         console.log("Someone joined Websocket! ", socket.id);
 
         socket.on('JOIN_ROOM', function (data) {
             console.log("Room Join Request: ", data.userId, data.matchId, data.isHost);
             socket.join(data.matchId);
             if(!data.isHost){
-                socket.to(data.matchId).emit("START_GAME");
+                gameMethods.startGame(io, data.matchId);
             }
         });
 
