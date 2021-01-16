@@ -25,12 +25,19 @@ class PlayScreen extends React.Component {
       myName: "",
       opponentName: "",
       gameMode: "Standard",
-      snackbarOpen: false
+      snackbarOpen: false,
+      currentCard: ""
     };
     this.snackbarOptions = {
       msg: "",
       severity: ""
     }
+    this.prevCards = [];
+    this.cardMap = {
+      0: "Stone",
+      1: "Paper",
+      2: "Scissor",
+    };
   }
 
   static getDerivedStateFromProps(props, current_state) {
@@ -48,28 +55,36 @@ class PlayScreen extends React.Component {
     return current_state;
   }
 
+  handleCardClick = (option) => {
+    console.log("Card click",option,this.cardMap[this.prevCards[option]]);
+    this.setState((prev_state) => ({
+      currentCard : option 
+    }));
+  }
+
   generateCards = () => {
-    let cardMap = {
-      0: "Stone",
-      1: "Paper",
-      2: "Scissor",
-    };
     let cardArray = [];
-    for (let i = 0; i < 3; i++) {
-      cardArray.push(
-        this.state.gameMode === "Standard" ? i : Math.floor(Math.random() * 3)
-      );
+    if(this.state.roundStatus === "MY_TURN"){
+      for (let i = 0; i < 3; i++) {
+        cardArray.push(
+          this.state.gameMode === "Standard" ? i : Math.floor(Math.random() * 3)
+        );
+      }
+      this.prevCards = cardArray;
+    } else {
+      cardArray = this.prevCards;
     }
+    
     return (
       <Grid container justify="center" alignItems="center" spacing={2}>
         <Grid item md={4}>
-          <PlayingCard type={cardMap[cardArray[0]]} />
+          <PlayingCard type={this.cardMap[cardArray[0]]} onClick={() => this.handleCardClick(0)} active={this.state.currentCard === 0} />
         </Grid>
         <Grid item md={4}>
-          <PlayingCard type={cardMap[cardArray[1]]} />
+          <PlayingCard type={this.cardMap[cardArray[1]]} onClick={() => this.handleCardClick(1)} active={this.state.currentCard === 1} />
         </Grid>
         <Grid item md={4}>
-          <PlayingCard type={cardMap[cardArray[2]]} />
+          <PlayingCard type={this.cardMap[cardArray[2]]} onClick={() => this.handleCardClick(2)} active={this.state.currentCard === 2} />
         </Grid>
       </Grid>
     );
@@ -84,6 +99,7 @@ class PlayScreen extends React.Component {
   }
 
   render() {
+    {console.log(this.state)}
     return (
       <div>
         <AppBar
