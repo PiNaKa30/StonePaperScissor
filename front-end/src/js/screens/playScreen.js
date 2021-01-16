@@ -56,35 +56,39 @@ class PlayScreen extends React.Component {
   }
 
   handleCardClick = (option) => {
+    if(this.state.roundStatus !== "MY_TURN"){
+      return;
+    }
+    console.log(this.prevCards);
     console.log("Card click",option,this.cardMap[this.prevCards[option]]);
     this.setState((prev_state) => ({
-      currentCard : option 
+      currentCard : option,
+      roundStatus: "OPPONENT_TURN"
     }));
+    
   }
 
   generateCards = () => {
-    let cardArray = [];
+    console.log("GenerateCards");
     if(this.state.roundStatus === "MY_TURN"){
       for (let i = 0; i < 3; i++) {
-        cardArray.push(
+        this.prevCards.push(
           this.state.gameMode === "Standard" ? i : Math.floor(Math.random() * 3)
         );
       }
-      this.prevCards = cardArray;
     } else {
-      cardArray = this.prevCards;
+      console.log("Else called");
     }
-    
     return (
       <Grid container justify="center" alignItems="center" spacing={2}>
         <Grid item md={4}>
-          <PlayingCard type={this.cardMap[cardArray[0]]} onClick={() => this.handleCardClick(0)} active={this.state.currentCard === 0} />
+          <PlayingCard type={this.cardMap[this.prevCards[0]]} onClick={() => this.handleCardClick(0)} active={this.state.currentCard === 0} />
         </Grid>
         <Grid item md={4}>
-          <PlayingCard type={this.cardMap[cardArray[1]]} onClick={() => this.handleCardClick(1)} active={this.state.currentCard === 1} />
+          <PlayingCard type={this.cardMap[this.prevCards[1]]} onClick={() => this.handleCardClick(1)} active={this.state.currentCard === 1} />
         </Grid>
         <Grid item md={4}>
-          <PlayingCard type={this.cardMap[cardArray[2]]} onClick={() => this.handleCardClick(2)} active={this.state.currentCard === 2} />
+          <PlayingCard type={this.cardMap[this.prevCards[2]]} onClick={() => this.handleCardClick(2)} active={this.state.currentCard === 2} />
         </Grid>
       </Grid>
     );
@@ -99,7 +103,7 @@ class PlayScreen extends React.Component {
   }
 
   render() {
-    {console.log(this.state)}
+    
     return (
       <div>
         <AppBar
@@ -165,6 +169,7 @@ class PlayScreen extends React.Component {
           </Grid>
           <Grid item md={1}></Grid>
         </Grid>
+        {console.log(this.prevCards)}
       </div>
     );
   }
