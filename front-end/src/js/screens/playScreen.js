@@ -26,18 +26,20 @@ class PlayScreen extends React.Component {
       opponentName: "",
       gameMode: "Standard",
       snackbarOpen: false,
-      currentCard: ""
+      currentCard: "",
+      socket: this.props.socket,
     };
     this.snackbarOptions = {
       msg: "",
-      severity: ""
-    }
+      severity: "",
+    };
     this.prevCards = [];
     this.cardMap = {
       0: "Stone",
       1: "Paper",
       2: "Scissor",
     };
+    this.socketRegistered = false;
   }
 
   static getDerivedStateFromProps(props, current_state) {
@@ -52,25 +54,68 @@ class PlayScreen extends React.Component {
       current_state.opponentName = props.gameInfo.hostName;
     }
     current_state.gameMode = props.gameInfo.gameMode;
+    current_state.socket = props.socket;
     return current_state;
   }
 
+  componentDidUpdate() {
+    if (this.state.socket != null && !this.socketRegistered) {
+      this.socketRegistered = true;
+      this.registerListeners();
+    }
+  }
+
+  registerListeners = () => {
+    console.log("Should be called only once");
+    this.state.socket.on("ROUND_OVER", (data) => {
+      console.log(data);
+      let myScore = 0,
+        opponentScore = 0;
+      if (this.props.userInfo.isHost) {
+        myScore = data.hostScore; opponentScore = data.joineeScore;
+      } else {
+        myScore = data.joineeScore; opponentScore = data.hostScore;
+      }
+      if (data.winner === "") {
+        this.snackbarOptions.msg = "It's a Draw !";
+        this.snackbarOptions.severity = "warning";
+      } else if (data.winner === this.state.myName) {
+        this.snackbarOptions.msg = "You win this round !";
+        this.snackbarOptions.severity = "success";
+      } else {
+        this.snackbarOptions.msg = "You lost this round !";
+        this.snackbarOptions.severity = "error";
+      }
+      this.setState({
+        round: data.round,
+        roundStatus: "MY_TURN",
+        myScore,
+        opponentScore,
+        snackbarOpen: true,
+        currentCard: "",
+      });
+    });
+  };
+
   handleCardClick = (option) => {
-    if(this.state.roundStatus !== "MY_TURN"){
+    if (this.state.roundStatus !== "MY_TURN") {
       return;
     }
     console.log(this.prevCards);
-    console.log("Card click",option,this.cardMap[this.prevCards[option]]);
+    console.log("Card click", option, this.cardMap[this.prevCards[option]]);
     this.setState((prev_state) => ({
-      currentCard : option,
-      roundStatus: "OPPONENT_TURN"
+      currentCard: option,
+      roundStatus: "OPPONENT_TURN",
     }));
-    
-  }
+    let data = {
+      card: this.cardMap[this.prevCards[option]]
+    };
+    this.state.socket.emit("ROUND_PLAY", data);
+  };
 
   generateCards = () => {
     console.log("GenerateCards");
-    if(this.state.roundStatus === "MY_TURN"){
+    if (this.state.roundStatus === "MY_TURN") {
       for (let i = 0; i < 3; i++) {
         this.prevCards.push(
           this.state.gameMode === "Standard" ? i : Math.floor(Math.random() * 3)
@@ -82,28 +127,39 @@ class PlayScreen extends React.Component {
     return (
       <Grid container justify="center" alignItems="center" spacing={2}>
         <Grid item md={4}>
-          <PlayingCard type={this.cardMap[this.prevCards[0]]} onClick={() => this.handleCardClick(0)} active={this.state.currentCard === 0} />
+          <PlayingCard
+            type={this.cardMap[this.prevCards[0]]}
+            onClick={() => this.handleCardClick(0)}
+            active={this.state.currentCard === 0}
+          />
         </Grid>
         <Grid item md={4}>
-          <PlayingCard type={this.cardMap[this.prevCards[1]]} onClick={() => this.handleCardClick(1)} active={this.state.currentCard === 1} />
+          <PlayingCard
+            type={this.cardMap[this.prevCards[1]]}
+            onClick={() => this.handleCardClick(1)}
+            active={this.state.currentCard === 1}
+          />
         </Grid>
         <Grid item md={4}>
-          <PlayingCard type={this.cardMap[this.prevCards[2]]} onClick={() => this.handleCardClick(2)} active={this.state.currentCard === 2} />
+          <PlayingCard
+            type={this.cardMap[this.prevCards[2]]}
+            onClick={() => this.handleCardClick(2)}
+            active={this.state.currentCard === 2}
+          />
         </Grid>
       </Grid>
     );
-  }
+  };
 
   generateWaitCard = () => {
-    if(this.state.roundStatus === "MY_TURN"){
-      return (<WaitingCard type={0} />);
-    } else if(this.state.roundStatus === "OPPONENT_TURN"){
-      return (<WaitingCard type={1} />);
+    if (this.state.roundStatus === "MY_TURN") {
+      return <WaitingCard type={0} />;
+    } else if (this.state.roundStatus === "OPPONENT_TURN") {
+      return <WaitingCard type={1} />;
     }
-  }
+  };
 
   render() {
-    
     return (
       <div>
         <AppBar
@@ -162,7 +218,11 @@ class PlayScreen extends React.Component {
         >
           <Grid item md={5}>
             {this.generateWaitCard()}
-            <CustomizedSnackbars open={this.state.snackbarOpen} msg={this.snackbarOptions.msg} severity={this.snackbarOptions.severity} />
+            <CustomizedSnackbars
+              open={this.state.snackbarOpen}
+              msg={this.snackbarOptions.msg}
+              severity={this.snackbarOptions.severity}
+            />
           </Grid>
           <Grid item md={6}>
             {this.generateCards()}

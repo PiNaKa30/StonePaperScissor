@@ -22,7 +22,8 @@ class MainScreen extends React.Component {
       isHost: false,
       matchId: this.props.matchId || "",
       hostError: "",
-      joinError: ""
+      joinError: "",
+      socketId: ""
     }
     this.hostInfo = null;
     this.joinInfo = null;
@@ -32,6 +33,7 @@ class MainScreen extends React.Component {
     if(props.gameStarted){
       props.history.push("/play");
     }
+    current_state.socketId = props.socketId;
     return current_state;
   }
 
@@ -50,7 +52,8 @@ class MainScreen extends React.Component {
     let data = {
       userId: hostInfo.userName,
       numRounds: hostInfo.numRounds,
-      gameMode: hostInfo.gameMode
+      gameMode: hostInfo.gameMode,
+      socketId: this.state.socketId
     };
     axios.post(`/host`, data)
       .then(res => {
@@ -75,7 +78,8 @@ class MainScreen extends React.Component {
   sendJoinRequest = (joinInfo) => {
     let data = {
       userId: joinInfo.userName,
-      matchId: joinInfo.joinCode
+      matchId: joinInfo.joinCode,
+      socketId: this.state.socketId
     };
     axios.post(`/join`, data)
       .then(res => {

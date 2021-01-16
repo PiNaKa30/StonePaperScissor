@@ -17,6 +17,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       gameStarted: false,
+      socketId: ""
     };
     this.socket = null;
     this.gameInfo = null;
@@ -33,6 +34,13 @@ export default class App extends React.Component {
   }
 
   registerListeners = () => {
+    this.socket.on("WELCOME_MSG", (data) => {
+      console.log(data);
+      this.setState({
+        socketId: data
+      });
+    });
+
     this.socket.on("START_GAME", (data) => {
       console.log("Game Started !", data);
       this.gameInfo = data;
@@ -47,6 +55,7 @@ export default class App extends React.Component {
       userId,
       matchId,
       isHost,
+      socketId: this.state.socketId
     };
     this.userInfo = data;
     this.socket.emit("JOIN_ROOM", data);
@@ -62,14 +71,14 @@ export default class App extends React.Component {
         <Router>
           <Switch>
             <Route exact path="/">
-              <MainScreen joinMatch={this.joinMatch} gameStarted={this.state.gameStarted}/>
+              <MainScreen joinMatch={this.joinMatch} gameStarted={this.state.gameStarted} socketId={this.state.socketId} />
             </Route>
             <Route path="/play">
-              <PlayScreen gameStarted={this.state.gameStarted} gameInfo={this.gameInfo} userInfo={this.userInfo} />
+              <PlayScreen gameStarted={this.state.gameStarted} gameInfo={this.gameInfo} userInfo={this.userInfo} socket={this.socket} />
             </Route>
             <Route
               path="/join/:matchId"
-              children={<Child joinMatch={this.joinMatch} gameStarted={this.state.gameStarted} />}
+              children={<Child joinMatch={this.joinMatch} gameStarted={this.state.gameStarted} socketId={this.state.socketId} />}
             />
             <Route path="*">
               <Redirect to="/" />
@@ -84,5 +93,5 @@ export default class App extends React.Component {
 function Child(props) {
   let { matchId } = useParams();
 
-  return <MainScreen matchId={matchId} joinMatch={props.joinMatch} gameStarted={props.gameStarted} />;
+  return <MainScreen matchId={matchId} joinMatch={props.joinMatch} gameStarted={props.gameStarted} socketId={props.socketId} />;
 }
