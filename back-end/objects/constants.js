@@ -14,5 +14,9 @@ module.exports = {
     SUCCESS_MATCH_HOSTED: "Match successfully hosted !",
     SUCCESS_MATCH_JOINED: "Match successfully joined !",
 
-    NOTIFY_CANT_JOIN_ROOM: "Cannot join the specified room !"
+    NOTIFY_CANT_JOIN_ROOM: "Cannot join the specified room !",
+
+    CARD_STONE: "Stone",
+    CARD_PAPER: "Paper",
+    CARD_SCISSOR: "Scissor"
 }

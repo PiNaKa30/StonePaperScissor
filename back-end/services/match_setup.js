@@ -2,20 +2,21 @@ const match = require('../objects/match');
 const cacheAdd = require('../cache/add');
 const constants = require('../objects/constants');
 
-function hostMatch(userId, numRounds, gameMode) {
-    var newMatch = match.createMatch(userId, numRounds, gameMode);
+function hostMatch(userId, numRounds, gameMode, socketId) {
+    var newMatch = match.createMatch(userId, numRounds, gameMode, socketId);
     var matchId = generateMatchId();
     console.log(userId, matchId);
-    cacheAdd.addPlayerToCache(userId, matchId);
+    cacheAdd.addPlayerToCache(socketId, matchId);
     cacheAdd.addMatchToCache(matchId, newMatch);
     return matchId;
 }
 
-function joinMatch(userId, matchId, matchData) {
+function joinMatch(userId, matchId, matchData, socketId) {
     console.log(userId, matchId);
     matchData.players.player2 = userId;
+    matchData.sockets.player2 = socketId;
     matchData.status = constants.MATCH_STARTED;
-    cacheAdd.addPlayerToCache(userId, matchId);
+    cacheAdd.addPlayerToCache(socketId, matchId);
     cacheAdd.addMatchToCache(matchId, matchData);
     return matchData;
 }

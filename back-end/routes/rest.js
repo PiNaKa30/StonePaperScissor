@@ -10,12 +10,12 @@ router.post('/', (req, res) => {
 
 router.post('/host', (req, res) => {
     var hostRequest = req.body;
-    return validationService.hostValidation(res, hostRequest.userId, hostRequest.numRounds, hostRequest.gameMode);
+    return validationService.hostValidation(res, hostRequest.userId, hostRequest.numRounds, hostRequest.gameMode, hostRequest.socketId);
 });
 
 router.post('/join', (req, res) => {
     var joinRequest = req.body;
-    return validationService.joinValidation(res, joinRequest.userId, joinRequest.matchId);
+    return validationService.joinValidation(res, joinRequest.userId, joinRequest.matchId, joinRequest.socketId);
 });
 
 module.exports.router = router;
