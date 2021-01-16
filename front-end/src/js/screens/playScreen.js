@@ -25,11 +25,11 @@ class PlayScreen extends React.Component {
       myName: "",
       opponentName: "",
       gameMode: "Standard",
-      snackbarOpen: false,
       currentCard: "",
       socket: this.props.socket,
     };
     this.snackbarOptions = {
+      open: false,
       msg: "",
       severity: "",
     };
@@ -86,12 +86,13 @@ class PlayScreen extends React.Component {
         this.snackbarOptions.msg = "You lost this round !";
         this.snackbarOptions.severity = "error";
       }
+      this.snackbarOptions.open = true;
+      this.prevCards = [];
       this.setState({
         round: data.round,
         roundStatus: "MY_TURN",
         myScore,
         opponentScore,
-        snackbarOpen: true,
         currentCard: "",
       });
     });
@@ -159,6 +160,19 @@ class PlayScreen extends React.Component {
     }
   };
 
+  generateSnackbar = () => {
+    if(this.snackbarOptions.open){
+      this.snackbarOptions.open = false;
+      return (
+        <CustomizedSnackbars
+                open={true}
+                msg={this.snackbarOptions.msg}
+                severity={this.snackbarOptions.severity}
+              />
+      );
+    } else return null;    
+  }
+
   render() {
     return (
       <div>
@@ -218,11 +232,7 @@ class PlayScreen extends React.Component {
         >
           <Grid item md={5}>
             {this.generateWaitCard()}
-            <CustomizedSnackbars
-              open={this.state.snackbarOpen}
-              msg={this.snackbarOptions.msg}
-              severity={this.snackbarOptions.severity}
-            />
+            {this.generateSnackbar()}
           </Grid>
           <Grid item md={6}>
             {this.generateCards()}

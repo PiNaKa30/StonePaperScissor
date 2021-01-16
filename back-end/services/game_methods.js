@@ -29,8 +29,8 @@ function playRound(io, socketId, card){
                     } else if(!isHost && data.moves.player1 === ""){
                         data.moves.player2 = card;
                     } else {
-                        let winner = (isHost) ? winnerPlayer(card, data.moves.player2) : winnerPlayer(data.moves.player2, card);
-
+                        let winner = (isHost) ? winnerPlayer(card, data.moves.player2) : winnerPlayer(data.moves.player1, card);
+                        console.log(winner);
                         if(winner === "Host"){
                             data.scores.player1 = data.scores.player1 + 1;
                             winner = data.players.player1;
@@ -60,18 +60,8 @@ function playRound(io, socketId, card){
     });
 }
 
-function winnerPlayer(cardHost, cardJoinee){
-    let card = winnerCard(cardHost,cardJoinee);
-    if(card === ""){
-        return "";
-    } else if(card === cardHost){
-        return "Host";
-    } else {
-        return "Joinee";
-    }
-}
-
 function winnerCard(card1, card2){
+    console.log(card1, "&&", card2);
     if(card1 === card2){
         return "";
     } else if(card1 === constants.CARD_STONE && card2 === constants.CARD_PAPER){
@@ -88,6 +78,20 @@ function winnerCard(card1, card2){
         return constants.CARD_SCISSOR;
     }
 }
+
+function winnerPlayer(cardHost, cardJoinee){
+    let card = winnerCard(cardHost,cardJoinee);
+    console.log(card, ":", cardHost, cardJoinee);
+    if(card === ""){
+        return "";
+    } else if(card === cardHost){
+        return "Host";
+    } else {
+        return "Joinee";
+    }
+}
+
+
 
 module.exports = {
     startGame,
