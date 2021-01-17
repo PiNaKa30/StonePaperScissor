@@ -21,8 +21,8 @@ function registerEvents(io) {
         });
 
         socket.on('disconnect', function() {
-            // Delete structures, Declare Winner
             console.log("User disconnected! ", socket.id);
+            gameMethods.declareWinnerByDisconnect();
         });
     });
 }

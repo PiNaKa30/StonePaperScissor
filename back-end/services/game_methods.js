@@ -29,7 +29,16 @@ function playRound(io, socketId, card){
                     } else if(!isHost && data.moves.player1 === ""){
                         data.moves.player2 = card;
                     } else {
-                        let winner = (isHost) ? winnerPlayer(card, data.moves.player2) : winnerPlayer(data.moves.player1, card);
+                        let winner = "", hostCard = "", joineeCard = "";
+                        if(isHost){
+                            winner = winnerPlayer(card, data.moves.player2);
+                            hostCard = card;
+                            joineeCard = data.moves.player2
+                        } else {
+                            winner = winnerPlayer(data.moves.player1, card);
+                            hostCard = data.moves.player1
+                            joineeCard = card;
+                        }
                         console.log(winner);
                         if(winner === "Host"){
                             data.scores.player1 = data.scores.player1 + 1;
@@ -45,19 +54,37 @@ function playRound(io, socketId, card){
 
                         let res = {
                             hostScore: data.scores.player1,
+                            hostCard,
                             joineeScore: data.scores.player2,
+                            joineeCard,
                             winner,
                             round: data.currentRound
                         }
                         console.log("Winner", res);
 
                         io.in(matchId).emit("ROUND_OVER", res);
+                        if(data.currentRound > data.numRounds){
+                            declareWinnerByScore(io, matchId, res.hostScore, res.joineeScore);
+                        }
                     }
                     cacheAdd.addMatchToCache(matchId, data);
                 }
             });
         }
     });
+}
+
+function declareWinnerByScore(io, matchId, hostScore, joineeScore) {
+    let data = {
+        hostScore,
+        joineeScore,
+        winBy: "Score" 
+    }
+    io.in(matchId).emit("GAME_OVER", data);
+}
+
+function declareWinnerByDisconnect(){
+    
 }
 
 function winnerCard(card1, card2){
@@ -95,5 +122,6 @@ function winnerPlayer(cardHost, cardJoinee){
 
 module.exports = {
     startGame,
-    playRound
+    playRound,
+    declareWinnerByDisconnect
 }

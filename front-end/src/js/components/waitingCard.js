@@ -25,7 +25,7 @@ function WaitingCard(props) {
 }
 
 function generateWaitingCard(type){
-  if(type === 0){
+  if(type === "MyTurn"){
     return (
       <CardContent> 
         <Typography color="textSecondary" variant="h5">Choose a Card from Deck</Typography>
@@ -33,7 +33,7 @@ function generateWaitingCard(type){
         <ArrowForwardIcon style={{fontSize: "48px"}} />
       </CardContent>
     );
-  } else if(type === 1){
+  } else if(type === "OpponentTurn"){
     return (
       <CardContent> 
         <Typography color="textSecondary" variant="h5">Waiting for opponent</Typography>
@@ -41,6 +41,33 @@ function generateWaitingCard(type){
         <HourglassEmptyIcon style={{fontSize: "48px", animation: `spin 3s linear infinite`}} />
       </CardContent>
     );
+  } else {
+    return (
+      <div>
+        <br />
+        <Typography
+        variant="h6"
+      >
+        Opponent Card
+      </Typography>
+        <CardContent>
+        <img src={getImage(type)} style={{ maxWidth: "100%" }} />
+        <br />
+      </CardContent>
+      </div>
+    );
+  }
+}
+
+function getImage(img) {
+  if (img === "Stone") {
+    return Stone;
+  } else if (img === "Paper") {
+    return Paper;
+  } else if (img === "Scissor") {
+    return Scissor;
+  } else {
+    return "";
   }
 }
 

@@ -13,6 +13,7 @@ import Scissor from "../../images/scissor.png";
 import PlayingCard from "../components/playingCard";
 import WaitingCard from "../components/waitingCard";
 import CustomizedSnackbars from "../components/snackbar";
+import ResultModal from "../components/result";
 
 class PlayScreen extends React.Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class PlayScreen extends React.Component {
       gameMode: "Standard",
       currentCard: "",
       socket: this.props.socket,
+      gameOver: false
     };
     this.snackbarOptions = {
       open: false,
@@ -38,7 +40,10 @@ class PlayScreen extends React.Component {
       0: "Stone",
       1: "Paper",
       2: "Scissor",
+      3: "MyTurn",
+      4: "OpponentTurn"
     };
+    this.opponentCard = "";
     this.socketRegistered = false;
   }
 
@@ -66,15 +71,17 @@ class PlayScreen extends React.Component {
   }
 
   registerListeners = () => {
-    console.log("Should be called only once");
+    
     this.state.socket.on("ROUND_OVER", (data) => {
       console.log(data);
       let myScore = 0,
         opponentScore = 0;
       if (this.props.userInfo.isHost) {
         myScore = data.hostScore; opponentScore = data.joineeScore;
+        this.opponentCard = data.joineeCard;
       } else {
         myScore = data.joineeScore; opponentScore = data.hostScore;
+        this.opponentCard = data.hostCard;
       }
       if (data.winner === "") {
         this.snackbarOptions.msg = "It's a Draw !";
@@ -87,19 +94,35 @@ class PlayScreen extends React.Component {
         this.snackbarOptions.severity = "error";
       }
       this.snackbarOptions.open = true;
-      this.prevCards = [];
       this.setState({
-        round: data.round,
-        roundStatus: "MY_TURN",
-        myScore,
-        opponentScore,
-        currentCard: "",
+        roundStatus: "ROUND_RESULT"
       });
+      setTimeout(() => this.resetRound(data.round, myScore, opponentScore), 3000);      
+    });
+
+    this.state.socket.on("GAME_OVER", (data) => {
+      console.log(data);
+      setTimeout(() => {
+        this.setState({
+          gameOver: true
+        });
+      }, 3000);
     });
   };
 
+  resetRound = (round, myScore, opponentScore) => {
+    this.prevCards = [];
+    this.setState({
+      round,
+      roundStatus: "MY_TURN",
+      myScore,
+      opponentScore,
+      currentCard: "",
+    });
+  }
+
   handleCardClick = (option) => {
-    if (this.state.roundStatus !== "MY_TURN") {
+    if (this.state.roundStatus !== "MY_TURN" || this.state.gameOver) {
       return;
     }
     console.log(this.prevCards);
@@ -154,9 +177,11 @@ class PlayScreen extends React.Component {
 
   generateWaitCard = () => {
     if (this.state.roundStatus === "MY_TURN") {
-      return <WaitingCard type={0} />;
+      return <WaitingCard type={this.cardMap[3]} />; 
     } else if (this.state.roundStatus === "OPPONENT_TURN") {
-      return <WaitingCard type={1} />;
+      return <WaitingCard type={this.cardMap[4]} />;
+    } else {
+      return <WaitingCard type={this.opponentCard} />;
     }
   };
 
@@ -171,6 +196,36 @@ class PlayScreen extends React.Component {
               />
       );
     } else return null;    
+  }
+
+  generateResultModal = () => {
+    if(!this.state.gameOver){
+      return null;
+    }
+    let data = {
+      myName: this.state.myName,
+      myScore: this.state.myScore,
+      opponentName: this.state.opponentName,
+      opponentScore: this.state.opponentScore
+    };
+    let msg = "Game Draw !";
+    let color = "black";
+    if(data.myScore > data.opponentScore){
+      msg = "You Win !";
+      color = "green";
+    } else if(data.myScore < data.opponentScore){
+      msg = "You Lose !";
+      color = "red";
+    }
+    return <ResultModal msg={msg} data={data} color={color} />
+  }
+
+  generateRoundNumber = () => {
+    if(this.state.gameOver){
+      return "Match Over";
+    } else {
+      return "Round " + this.state.round;
+    }
   }
 
   render() {
@@ -214,7 +269,7 @@ class PlayScreen extends React.Component {
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} style={{ textAlign: "center" }}>
             <Typography variant="h6">
-              <strong>Round {this.state.round}</strong>
+              <strong>{this.generateRoundNumber()}</strong>
             </Typography>
           </Grid>
         </Grid>
@@ -233,6 +288,7 @@ class PlayScreen extends React.Component {
           <Grid item md={5}>
             {this.generateWaitCard()}
             {this.generateSnackbar()}
+            {this.generateResultModal()}
           </Grid>
           <Grid item md={6}>
             {this.generateCards()}
