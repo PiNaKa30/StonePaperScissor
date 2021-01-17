@@ -39,7 +39,6 @@ export default class HostForm extends React.Component {
   };
 
   render() {
-    console.log("host", this.state);
     return (
       <div>
         <form noValidate autoComplete="off">

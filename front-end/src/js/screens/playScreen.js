@@ -66,7 +66,6 @@ class PlayScreen extends React.Component {
 
   registerListeners = () => {
     this.state.socket.on("ROUND_OVER", (data) => {
-      console.log(data);
       let myScore = 0,
         opponentScore = 0;
       if (this.props.userInfo.isHost) {
@@ -99,7 +98,6 @@ class PlayScreen extends React.Component {
     });
 
     this.state.socket.on("GAME_OVER", (data) => {
-      console.log(data);
       setTimeout(() => {
         this.setState({
           gameOver: true,
@@ -123,8 +121,6 @@ class PlayScreen extends React.Component {
     if (this.state.roundStatus !== "MY_TURN" || this.state.gameOver) {
       return;
     }
-    console.log(this.prevCards);
-    console.log("Card click", option, this.cardMap[this.prevCards[option]]);
     this.setState((prev_state) => ({
       currentCard: option,
       roundStatus: "OPPONENT_TURN",
@@ -136,15 +132,12 @@ class PlayScreen extends React.Component {
   };
 
   generateCards = () => {
-    console.log("GenerateCards");
     if (this.state.roundStatus === "MY_TURN") {
       for (let i = 0; i < 3; i++) {
         this.prevCards.push(
           this.state.gameMode === "Standard" ? i : Math.floor(Math.random() * 3)
         );
       }
-    } else {
-      console.log("Else called");
     }
     return (
       <Grid container justify="center" alignItems="center" spacing={2}>
@@ -293,7 +286,6 @@ class PlayScreen extends React.Component {
           </Grid>
           <Grid item md={1}></Grid>
         </Grid>
-        {console.log(this.prevCards)}
       </div>
     );
   }

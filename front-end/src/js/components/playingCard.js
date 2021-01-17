@@ -26,7 +26,11 @@ function PlayingCard(props) {
   return (
     <Card style={border} onClick={props.onClick}>
       <CardContent style={{ position: "absolute", top: "10%" }}>
-        <img src={getImage(props.type)} style={{ maxWidth: "100%" }} />
+        <img
+          src={getImage(props.type)}
+          style={{ maxWidth: "100%" }}
+          alt="Stone Paper Scissor Choice"
+        />
         <br />
       </CardContent>
       <Typography

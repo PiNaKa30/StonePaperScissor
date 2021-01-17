@@ -33,14 +33,12 @@ export default class App extends React.Component {
 
   registerListeners = () => {
     this.socket.on("WELCOME_MSG", (data) => {
-      console.log(data);
       this.setState({
         socketId: data,
       });
     });
 
     this.socket.on("START_GAME", (data) => {
-      console.log("Game Started !", data);
       this.gameInfo = data;
       this.setState({
         gameStarted: true,

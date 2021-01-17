@@ -41,7 +41,6 @@ class MainScreen extends React.Component {
   };
 
   handleJoin = (joinInfo) => {
-    console.log(joinInfo);
     this.joinInfo = joinInfo;
     this.sendJoinRequest(joinInfo);
   };
@@ -55,7 +54,6 @@ class MainScreen extends React.Component {
     };
     axios.post(`/host`, data).then((res) => {
       res = res.data;
-      console.log(res);
       if (res.type === "Success") {
         this.setState({
           ...this.state,
@@ -80,7 +78,6 @@ class MainScreen extends React.Component {
     };
     axios.post(`/join`, data).then((res) => {
       res = res.data;
-      console.log(res);
       if (res.type === "Success") {
         this.setState({
           ...this.state,
@@ -136,14 +133,13 @@ class MainScreen extends React.Component {
           container
           spacing={2}
           alignItems="center"
-          //justify="center"
           style={{ minHeight: "100vh" }}
         >
           <Grid item md={1} />
           <Grid item md={5}>
             <img
               src={signs}
-              alt="Image"
+              alt="SPS Rules"
               style={{ width: "75%", height: "75%" }}
             />
           </Grid>

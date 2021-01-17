@@ -33,7 +33,9 @@ function generateWaitingCard(type) {
         </Typography>
         <br />
         <br />
-        <ArrowForwardIcon style={{ fontSize: "48px" }} />
+        <ArrowForwardIcon
+          style={{ fontSize: "48px", animation: `bounce 3s linear infinite` }}
+        />
       </CardContent>
     );
   } else if (type === "OpponentTurn") {
@@ -55,7 +57,11 @@ function generateWaitingCard(type) {
         <br />
         <Typography variant="h6">Opponent Card</Typography>
         <CardContent>
-          <img src={getImage(type)} style={{ maxWidth: "100%" }} />
+          <img
+            src={getImage(type)}
+            style={{ maxWidth: "100%" }}
+            alt="Waiting for turn"
+          />
           <br />
         </CardContent>
       </div>

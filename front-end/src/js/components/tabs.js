@@ -45,11 +45,9 @@ export default class FullWidthTabs extends React.Component {
       hostError: this.props.hostError,
       joinError: this.props.joinError,
     };
-    console.log(this.state);
   }
 
   static getDerivedStateFromProps(props, current_state) {
-    console.log("Triggered");
     return {
       matchId: props.matchId,
       isHost: props.isHost,
@@ -60,7 +58,6 @@ export default class FullWidthTabs extends React.Component {
   }
 
   handleChange = (e, newValue) => {
-    console.log("index", newValue);
     this.setState((previousState) => ({
       matchId: previousState.matchId,
       isHost: previousState.isHost,
@@ -69,7 +66,6 @@ export default class FullWidthTabs extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div
         style={{
