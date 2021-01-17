@@ -5,8 +5,8 @@ import Stone from "../../images/stone.png";
 import Paper from "../../images/paper.png";
 import Scissor from "../../images/scissor.png";
 import Typography from "@material-ui/core/Typography";
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 function WaitingCard(props) {
   return (
@@ -15,8 +15,8 @@ function WaitingCard(props) {
         height: "270px",
         maxWidth: "220px",
         margin: "auto",
-        justifyContent: "center", 
-        display: "flex"
+        justifyContent: "center",
+        display: "flex",
       }}
     >
       {generateWaitingCard(props.type)}
@@ -24,36 +24,40 @@ function WaitingCard(props) {
   );
 }
 
-function generateWaitingCard(type){
-  if(type === "MyTurn"){
+function generateWaitingCard(type) {
+  if (type === "MyTurn") {
     return (
-      <CardContent> 
-        <Typography color="textSecondary" variant="h5">Choose a Card from Deck</Typography>
-        <br /><br />
-        <ArrowForwardIcon style={{fontSize: "48px"}} />
+      <CardContent>
+        <Typography color="textSecondary" variant="h5">
+          Choose a Card from Deck
+        </Typography>
+        <br />
+        <br />
+        <ArrowForwardIcon style={{ fontSize: "48px" }} />
       </CardContent>
     );
-  } else if(type === "OpponentTurn"){
+  } else if (type === "OpponentTurn") {
     return (
-      <CardContent> 
-        <Typography color="textSecondary" variant="h5">Waiting for opponent</Typography>
-        <br /><br />
-        <HourglassEmptyIcon style={{fontSize: "48px", animation: `spin 3s linear infinite`}} />
+      <CardContent>
+        <Typography color="textSecondary" variant="h5">
+          Waiting for opponent
+        </Typography>
+        <br />
+        <br />
+        <HourglassEmptyIcon
+          style={{ fontSize: "48px", animation: `spin 3s linear infinite` }}
+        />
       </CardContent>
     );
   } else {
     return (
       <div>
         <br />
-        <Typography
-        variant="h6"
-      >
-        Opponent Card
-      </Typography>
+        <Typography variant="h6">Opponent Card</Typography>
         <CardContent>
-        <img src={getImage(type)} style={{ maxWidth: "100%" }} />
-        <br />
-      </CardContent>
+          <img src={getImage(type)} style={{ maxWidth: "100%" }} />
+          <br />
+        </CardContent>
       </div>
     );
   }

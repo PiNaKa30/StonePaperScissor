@@ -36,28 +36,27 @@ function TabPanel(props) {
 }
 
 export default class FullWidthTabs extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       matchId: this.props.matchId,
       isHost: this.props.isHost,
-      index: (this.props.matchId !== "" || this.props.isHost) ? 1 : 0,
+      index: this.props.matchId !== "" || this.props.isHost ? 1 : 0,
       hostError: this.props.hostError,
-      joinError: this.props.joinError
-    }
+      joinError: this.props.joinError,
+    };
     console.log(this.state);
   }
 
-  static getDerivedStateFromProps(props, current_state){
+  static getDerivedStateFromProps(props, current_state) {
     console.log("Triggered");
     return {
       matchId: props.matchId,
       isHost: props.isHost,
-      index: (props.matchId !== "" || props.isHost) ? 1 : current_state.index,
+      index: props.matchId !== "" || props.isHost ? 1 : current_state.index,
       hostError: props.hostError || "",
-      joinError: props.joinError || ""
-    }
+      joinError: props.joinError || "",
+    };
   }
 
   handleChange = (e, newValue) => {
@@ -65,11 +64,11 @@ export default class FullWidthTabs extends React.Component {
     this.setState((previousState) => ({
       matchId: previousState.matchId,
       isHost: previousState.isHost,
-      index: newValue
+      index: newValue,
     }));
   };
 
-  render(){
+  render() {
     console.log(this.state);
     return (
       <div
@@ -93,16 +92,22 @@ export default class FullWidthTabs extends React.Component {
             <Tab label="Join Game" {...a11yProps(1)} />
           </Tabs>
         </AppBar>
-  
+
         <TabPanel value={this.state.index} index={0}>
-          <HostForm submit={this.props.submitHost} errorText={this.state.hostError} />
+          <HostForm
+            submit={this.props.submitHost}
+            errorText={this.state.hostError}
+          />
         </TabPanel>
         <TabPanel value={this.state.index} index={1}>
-          <JoinForm matchId={this.state.matchId} submit={this.props.submitJoin} isHost={this.state.isHost} errorText={this.state.joinError} />
+          <JoinForm
+            matchId={this.state.matchId}
+            submit={this.props.submitJoin}
+            isHost={this.state.isHost}
+            errorText={this.state.joinError}
+          />
         </TabPanel>
       </div>
     );
   }
-
-  
 }

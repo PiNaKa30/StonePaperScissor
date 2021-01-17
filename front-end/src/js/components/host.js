@@ -14,15 +14,15 @@ export default class HostForm extends React.Component {
       userName: "",
       numRounds: 9,
       gameMode: "Standard",
-      errorText: ""
+      errorText: "",
     };
   }
 
-  static getDerivedStateFromProps(props, current_state){
+  static getDerivedStateFromProps(props, current_state) {
     return {
       ...current_state,
-      errorText: props.errorText
-    }
+      errorText: props.errorText,
+    };
   }
 
   handleChange = (e) => {
@@ -46,7 +46,7 @@ export default class HostForm extends React.Component {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
-                {... addError(this.state.errorText)}
+                {...addError(this.state.errorText)}
                 fullWidth
                 autoFocus
                 value={this.state.userName}
@@ -121,8 +121,12 @@ export default class HostForm extends React.Component {
                 />
               </RadioGroup>
             </Grid>
-            <Grid item xs={12} style={{textAlign: "right"}}>
-              <Button variant="contained" color="primary" onClick={() => this.props.submit(this.state)}>
+            <Grid item xs={12} style={{ textAlign: "right" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => this.props.submit(this.state)}
+              >
                 Host Game
               </Button>
             </Grid>
@@ -133,6 +137,6 @@ export default class HostForm extends React.Component {
   }
 }
 
-function addError(errorText){
-  return errorText === "" ? null : {error : true};
+function addError(errorText) {
+  return errorText === "" ? null : { error: true };
 }

@@ -43,7 +43,9 @@ export default function ResultModal(props) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <Typography variant="h1" style={{color: props.color}}>{props.msg}</Typography>
+            <Typography variant="h1" style={{ color: props.color }}>
+              {props.msg}
+            </Typography>
             <br />
             <Grid
               container
@@ -62,9 +64,7 @@ export default function ResultModal(props) {
                 <Typography variant="h3" color="primary">
                   {props.data.myName}
                 </Typography>
-                <Typography variant="h3">
-                  {props.data.myScore}
-                </Typography>
+                <Typography variant="h3">{props.data.myScore}</Typography>
               </Grid>
             </Grid>
           </div>

@@ -4,12 +4,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Stone from "../../images/stone.png";
-import Paper from "../../images/paper.png";
-import Scissor from "../../images/scissor.png";
 import PlayingCard from "../components/playingCard";
 import WaitingCard from "../components/waitingCard";
 import CustomizedSnackbars from "../components/snackbar";
@@ -28,7 +22,7 @@ class PlayScreen extends React.Component {
       gameMode: "Standard",
       currentCard: "",
       socket: this.props.socket,
-      gameOver: false
+      gameOver: false,
     };
     this.snackbarOptions = {
       open: false,
@@ -41,16 +35,16 @@ class PlayScreen extends React.Component {
       1: "Paper",
       2: "Scissor",
       3: "MyTurn",
-      4: "OpponentTurn"
+      4: "OpponentTurn",
     };
     this.opponentCard = "";
     this.socketRegistered = false;
   }
 
   static getDerivedStateFromProps(props, current_state) {
-    // if (!props.gameStarted) {
-    //   props.history.push("/");
-    // }
+    if (!props.gameStarted) {
+      props.history.push("/");
+    }
     if (props.userInfo.isHost) {
       current_state.myName = props.gameInfo.hostName;
       current_state.opponentName = props.gameInfo.joineeName;
@@ -71,16 +65,17 @@ class PlayScreen extends React.Component {
   }
 
   registerListeners = () => {
-    
     this.state.socket.on("ROUND_OVER", (data) => {
       console.log(data);
       let myScore = 0,
         opponentScore = 0;
       if (this.props.userInfo.isHost) {
-        myScore = data.hostScore; opponentScore = data.joineeScore;
+        myScore = data.hostScore;
+        opponentScore = data.joineeScore;
         this.opponentCard = data.joineeCard;
       } else {
-        myScore = data.joineeScore; opponentScore = data.hostScore;
+        myScore = data.joineeScore;
+        opponentScore = data.hostScore;
         this.opponentCard = data.hostCard;
       }
       if (data.winner === "") {
@@ -95,16 +90,19 @@ class PlayScreen extends React.Component {
       }
       this.snackbarOptions.open = true;
       this.setState({
-        roundStatus: "ROUND_RESULT"
+        roundStatus: "ROUND_RESULT",
       });
-      setTimeout(() => this.resetRound(data.round, myScore, opponentScore), 3000);      
+      setTimeout(
+        () => this.resetRound(data.round, myScore, opponentScore),
+        3000
+      );
     });
 
     this.state.socket.on("GAME_OVER", (data) => {
       console.log(data);
       setTimeout(() => {
         this.setState({
-          gameOver: true
+          gameOver: true,
         });
       }, 3000);
     });
@@ -119,7 +117,7 @@ class PlayScreen extends React.Component {
       opponentScore,
       currentCard: "",
     });
-  }
+  };
 
   handleCardClick = (option) => {
     if (this.state.roundStatus !== "MY_TURN" || this.state.gameOver) {
@@ -132,7 +130,7 @@ class PlayScreen extends React.Component {
       roundStatus: "OPPONENT_TURN",
     }));
     let data = {
-      card: this.cardMap[this.prevCards[option]]
+      card: this.cardMap[this.prevCards[option]],
     };
     this.state.socket.emit("ROUND_PLAY", data);
   };
@@ -177,7 +175,7 @@ class PlayScreen extends React.Component {
 
   generateWaitCard = () => {
     if (this.state.roundStatus === "MY_TURN") {
-      return <WaitingCard type={this.cardMap[3]} />; 
+      return <WaitingCard type={this.cardMap[3]} />;
     } else if (this.state.roundStatus === "OPPONENT_TURN") {
       return <WaitingCard type={this.cardMap[4]} />;
     } else {
@@ -186,47 +184,47 @@ class PlayScreen extends React.Component {
   };
 
   generateSnackbar = () => {
-    if(this.snackbarOptions.open){
+    if (this.snackbarOptions.open) {
       this.snackbarOptions.open = false;
       return (
         <CustomizedSnackbars
-                open={true}
-                msg={this.snackbarOptions.msg}
-                severity={this.snackbarOptions.severity}
-              />
+          open={true}
+          msg={this.snackbarOptions.msg}
+          severity={this.snackbarOptions.severity}
+        />
       );
-    } else return null;    
-  }
+    } else return null;
+  };
 
   generateResultModal = () => {
-    if(!this.state.gameOver){
+    if (!this.state.gameOver) {
       return null;
     }
     let data = {
       myName: this.state.myName,
       myScore: this.state.myScore,
       opponentName: this.state.opponentName,
-      opponentScore: this.state.opponentScore
+      opponentScore: this.state.opponentScore,
     };
     let msg = "Game Draw !";
     let color = "black";
-    if(data.myScore > data.opponentScore){
+    if (data.myScore > data.opponentScore) {
       msg = "You Win !";
       color = "green";
-    } else if(data.myScore < data.opponentScore){
+    } else if (data.myScore < data.opponentScore) {
       msg = "You Lose !";
       color = "red";
     }
-    return <ResultModal msg={msg} data={data} color={color} />
-  }
+    return <ResultModal msg={msg} data={data} color={color} />;
+  };
 
   generateRoundNumber = () => {
-    if(this.state.gameOver){
+    if (this.state.gameOver) {
       return "Match Over";
     } else {
       return "Round " + this.state.round;
     }
-  }
+  };
 
   render() {
     return (

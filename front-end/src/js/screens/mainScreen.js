@@ -6,14 +6,12 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import signs from "../../images/signs.jpg";
-import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import HomeIcon from '@material-ui/icons/Home';
+import HomeIcon from "@material-ui/icons/Home";
 import IconButton from "@material-ui/core/IconButton";
-import axios from 'axios';
-import MenuIcon from "@material-ui/icons/Menu";
-import {withRouter} from 'react-router';
+import axios from "axios";
+import { withRouter } from "react-router";
 
 class MainScreen extends React.Component {
   constructor(props) {
@@ -23,14 +21,14 @@ class MainScreen extends React.Component {
       matchId: this.props.matchId || "",
       hostError: "",
       joinError: "",
-      socketId: ""
-    }
+      socketId: "",
+    };
     this.hostInfo = null;
     this.joinInfo = null;
   }
 
   static getDerivedStateFromProps(props, current_state) {
-    if(props.gameStarted){
+    if (props.gameStarted) {
       props.history.push("/play");
     }
     current_state.socketId = props.socketId;
@@ -40,77 +38,80 @@ class MainScreen extends React.Component {
   handleHost = (hostInfo) => {
     this.hostInfo = hostInfo;
     this.sendHostRequest(hostInfo);
-  }
+  };
 
   handleJoin = (joinInfo) => {
     console.log(joinInfo);
     this.joinInfo = joinInfo;
     this.sendJoinRequest(joinInfo);
-  }
+  };
 
   sendHostRequest = (hostInfo) => {
     let data = {
       userId: hostInfo.userName,
       numRounds: hostInfo.numRounds,
       gameMode: hostInfo.gameMode,
-      socketId: this.state.socketId
+      socketId: this.state.socketId,
     };
-    axios.post(`/host`, data)
-      .then(res => {
-        res = res.data;
-        console.log(res);
-        if(res.type === "Success"){
-          this.setState({
-            ...this.state,
-            isHost: true,
-            matchId: res.data.matchId
-          });
-          this.props.joinMatch(data.userId, res.data.matchId, true);
-        } else {
-          this.setState({
-            ...this.state,
-            hostError: res.message
-          });
-        }
-      });
-  }
+    axios.post(`/host`, data).then((res) => {
+      res = res.data;
+      console.log(res);
+      if (res.type === "Success") {
+        this.setState({
+          ...this.state,
+          isHost: true,
+          matchId: res.data.matchId,
+        });
+        this.props.joinMatch(data.userId, res.data.matchId, true);
+      } else {
+        this.setState({
+          ...this.state,
+          hostError: res.message,
+        });
+      }
+    });
+  };
 
   sendJoinRequest = (joinInfo) => {
     let data = {
       userId: joinInfo.userName,
       matchId: joinInfo.joinCode,
-      socketId: this.state.socketId
+      socketId: this.state.socketId,
     };
-    axios.post(`/join`, data)
-      .then(res => {
-        res = res.data;
-        console.log(res);
-        if(res.type === "Success"){
-          this.setState({
-            ...this.state,
-            isHost: true,
-            matchId: data.matchId
-          });
-          this.props.joinMatch(data.userId, data.matchId, false);
-        } else {
-          this.setState({
-            ...this.state,
-            joinError: res.message
-          });
-        }
-      });
-  }
-
-
+    axios.post(`/join`, data).then((res) => {
+      res = res.data;
+      console.log(res);
+      if (res.type === "Success") {
+        this.setState({
+          ...this.state,
+          isHost: true,
+          matchId: data.matchId,
+        });
+        this.props.joinMatch(data.userId, data.matchId, false);
+      } else {
+        this.setState({
+          ...this.state,
+          joinError: res.message,
+        });
+      }
+    });
+  };
 
   render() {
     return (
       <div>
         <AppBar position="static">
           <Toolbar>
-          <IconButton edge="start" size="small" color="primary" aria-label="home" style={{backgroundColor: "white", marginRight: "16px"}} href="/">
-            <HomeIcon />
-          </IconButton>
+            <IconButton
+              edge="start"
+              size="small"
+              color="primary"
+              aria-label="home"
+              style={{ backgroundColor: "white", marginRight: "16px" }}
+              href="/"
+            >
+              <HomeIcon />
+            </IconButton>
             <Typography variant="h5">
               <strong>Stone Paper Scissor</strong>
             </Typography>
@@ -147,7 +148,14 @@ class MainScreen extends React.Component {
             />
           </Grid>
           <Grid item md={5}>
-            <FullWidthTabs matchId={this.state.matchId} submitHost={this.handleHost} submitJoin={this.handleJoin} isHost={this.state.isHost} hostError={this.state.hostError} joinError={this.state.joinError} />
+            <FullWidthTabs
+              matchId={this.state.matchId}
+              submitHost={this.handleHost}
+              submitJoin={this.handleJoin}
+              isHost={this.state.isHost}
+              hostError={this.state.hostError}
+              joinError={this.state.joinError}
+            />
           </Grid>
           <Grid item md={1} />
         </Grid>
