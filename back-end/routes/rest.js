@@ -2,10 +2,9 @@ const express = require('express');
 const validationService = require('../services/validation');
 const router = express.Router();
 
-
 router.post('/', (req, res) => {
     console.log(req.body.text);
-    res.send('Hello World!');
+    res.send('Stone Paper Scissor');
 });
 
 router.post('/host', (req, res) => {

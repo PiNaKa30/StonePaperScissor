@@ -12,7 +12,7 @@ export default class HostForm extends React.Component {
     super(props);
     this.state = {
       userName: "",
-      numRounds: 9,
+      numRounds: 3,
       gameMode: "Standard",
       errorText: "",
     };
@@ -66,20 +66,7 @@ export default class HostForm extends React.Component {
                 spacing={2}
                 alignItems="center"
               >
-                <Grid item lg={6}>
-                  <TextField
-                    fullWidth
-                    id="numRoundsInput"
-                    label="Rounds"
-                    type="number"
-                    value={this.state.numRounds}
-                    onChange={this.handleChange}
-                    name="numRounds"
-                    InputProps={{ inputProps: { min: 1, max: 99 } }}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item lg={6}>
+                <Grid item lg={12}>
                   <TextField
                     fullWidth
                     id="numRoundsInput"

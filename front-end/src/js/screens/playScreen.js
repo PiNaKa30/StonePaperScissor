@@ -39,6 +39,7 @@ class PlayScreen extends React.Component {
     };
     this.opponentCard = "";
     this.socketRegistered = false;
+    this.winReason = "Score";
   }
 
   static getDerivedStateFromProps(props, current_state) {
@@ -98,6 +99,8 @@ class PlayScreen extends React.Component {
     });
 
     this.state.socket.on("GAME_OVER", (data) => {
+      console.log(data);
+      this.winReason = data.winBy;
       setTimeout(() => {
         this.setState({
           gameOver: true,
@@ -193,22 +196,27 @@ class PlayScreen extends React.Component {
     if (!this.state.gameOver) {
       return null;
     }
-    let data = {
-      myName: this.state.myName,
-      myScore: this.state.myScore,
-      opponentName: this.state.opponentName,
-      opponentScore: this.state.opponentScore,
-    };
-    let msg = "Game Draw !";
-    let color = "black";
-    if (data.myScore > data.opponentScore) {
-      msg = "You Win !";
-      color = "green";
-    } else if (data.myScore < data.opponentScore) {
-      msg = "You Lose !";
-      color = "red";
+    if(this.winReason === "Abandon"){
+      return <ResultModal msg="You Win !" color="green" />;
+    } else {
+
+      let data = {
+        myName: this.state.myName,
+        myScore: this.state.myScore,
+        opponentName: this.state.opponentName,
+        opponentScore: this.state.opponentScore,
+      };
+      let msg = "Game Draw !";
+      let color = "black";
+      if (data.myScore > data.opponentScore) {
+        msg = "You Win !";
+        color = "green";
+      } else if (data.myScore < data.opponentScore) {
+        msg = "You Lose !";
+        color = "red";
+      }
+      return <ResultModal msg={msg} data={data} color={color} />;
     }
-    return <ResultModal msg={msg} data={data} color={color} />;
   };
 
   generateRoundNumber = () => {
