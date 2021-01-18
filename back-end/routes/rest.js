@@ -3,7 +3,6 @@ const validationService = require('../services/validation');
 const router = express.Router();
 
 router.post('/', (req, res) => {
-    console.log(req.body.text);
     res.send('Stone Paper Scissor');
 });
 

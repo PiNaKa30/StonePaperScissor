@@ -1,19 +1,30 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const props = require('./props');
+const express = require("express");
+const bodyParser = require("body-parser");
+const path = require("path");
+const props = require("./props");
 
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
-const ws = require('./events/websocket');
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
+const ws = require("./events/websocket");
 
 app.use(bodyParser.json());
+
+if (props.ENVIRONMENT === "PRODUCTION") {
+  app.use(express.static(path.join(__dirname, "build")));
+  app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+  });
+}
+
 app.use(function (req, res, next) {
-    next();
+  next();
 });
-app.use('/', require('./routes/rest').router);
+app.use("/", require("./routes/rest").router);
 ws.registerEvents(io);
 
 http.listen(props.PORT_SERVER, () => {
-  console.log(`StonePaperScissor: Backend up at http://localhost:${props.PORT_SERVER}`);
+  console.log(
+    `StonePaperScissor: Backend up at http://localhost:${props.PORT_SERVER}`
+  );
 });

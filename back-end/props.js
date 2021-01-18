@@ -1,4 +1,5 @@
 module.exports = {
-    PORT_SERVER: 8000,
-    PORT_REDIS: 6379,
+    PORT_SERVER: 8000,              //* Node server port
+    PORT_REDIS: 6379,               //* Redis port
+    ENVIRONMENT: "DEVELOPMENT"      //* DEVELOPMENT or PRODUCTION
 }
