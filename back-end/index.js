@@ -7,7 +7,7 @@ const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const ws = require("./events/websocket");
-const port = process.env.PORT || props.PORT_SERVER;
+const port = props.PORT_SERVER;
 
 app.use(bodyParser.json());
 
