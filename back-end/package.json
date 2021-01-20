@@ -4,7 +4,7 @@
   "description": "Node application for Stone Paper Scissor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "PiNaKa30",
   "license": "ISC",
