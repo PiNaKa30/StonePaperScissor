@@ -1,5 +1,6 @@
 # StonePaperScissor
 A game of Stone-Paper-Scissor built using `Nodejs`, `Express`, `React`, `Redis` and `Websockets`.
+<img width="600" height="185" alt="Stone Paper Scissor signs" src="./extras/signs.png">
 
 ## Index
 1. [Deployment](#deployment)
@@ -41,3 +42,10 @@ This build serves the front-end built in `React` as static content and the back-
 7. You will see a success message of server running and redis connected.
 8. Open the browser manually, and your deployment is now complete.
 
+## Screenshots
+
+| | |
+|:-------------------------:|:-------------------------:|
+|<img width="1000" alt="Host Screen" src="./extras/ss1.png"> | <img width="1000" alt="Join Screen" src="./extras/ss2.png">|
+|<img width="1000" alt="My Turn" src="./extras/ss3.png"> | <img width="1000" alt="Opponent Turn" src="./extras/ss4.png">|
+|<img width="1000" alt="Round Over" src="./extras/ss5.png"> | <img width="1000" alt="JGame Over" src="./extras/ss6.png">|
