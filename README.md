@@ -4,11 +4,17 @@ A game of Stone-Paper-Scissor built using `Nodejs`, `Express`, `React`, `Redis` 
 <img width="600" height="185" alt="Stone Paper Scissor signs" src="./extras/signs.png">
 
 ## Index 
-1. [Deployment](#deployment)
+1. [Features](#features)
+2. [Deployment](#deployment)
    - [Docker build](#docker-build)
    - [Development build](#development-build)
    - [Production build](#production-build)
-2. [Screenshots](#screenshots)
+3. [Screenshots](#screenshots)
+
+## Features
+- No registration required
+- Easy hosting/joining process
+- Real-time gameplay
 
 ## Deployment
 The three ways to deploy and run/test the application are listed below:
