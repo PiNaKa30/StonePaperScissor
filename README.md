@@ -1,7 +1,7 @@
 # StonePaperScissor
 A game of Stone-Paper-Scissor built using `Nodejs`, `Express`, `React`, `Redis` and `Websockets`.
 <br><br>
-<img width="600" height="185" alt="Stone Paper Scissor signs" src="./extras/signs.png">
+<img width="600" height="185" alt="Stone Paper Scissor banner" title="Stone Paper Scissor banner" src="./extras/signs.png">
 
 ## Index 
 1. [Features](#features)
@@ -52,6 +52,12 @@ This build serves the front-end built in `React` as static content and the back-
 
 | | |
 |:-------------------------:|:-------------------------:|
-|<img width="1000" alt="Host Screen" src="./extras/ss1.png"> | <img width="1000" alt="Join Screen" src="./extras/ss2.png">|
-|<img width="1000" alt="My Turn" src="./extras/ss3.png"> | <img width="1000" alt="Opponent Turn" src="./extras/ss4.png">|
-|<img width="1000" alt="Round Over" src="./extras/ss5.png"> | <img width="1000" alt="JGame Over" src="./extras/ss6.png">|
+|<img width="1000" alt="Host Screen" title="Host Screen" src="./extras/ss1.png"> | <img width="1000" alt="Join Screen" title="Join Screen" src="./extras/ss2.png">|
+| Host Screen | Join Screen |
+| | |
+|<img width="1000" alt="Player Turn" title="Player Turn" src="./extras/ss3.png"> | <img width="1000" alt="Opponent Turn" title="Opponent Turn" src="./extras/ss4.png">|
+| Player Turn | Opponent Turn |
+| | |
+|<img width="1000" alt="Round Over" title="Round Over" src="./extras/ss5.png"> | <img width="1000" alt="Game Over" title="Game Over" src="./extras/ss6.png">|
+| Round Over | Game Over |
+| | |
